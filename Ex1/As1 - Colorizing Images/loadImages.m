@@ -6,14 +6,18 @@
 %   Finally the three arrays images_R, -_G and -_B are returned.
 
 function [ images_R, images_G, images_B ] = loadImages( path, images_nr )
+    %arrays containing the names of the r-, g- and 
+    %b-images respectively
     R_names = cell(images_nr, 1);
     G_names = cell(images_nr, 1);
     B_names = cell(images_nr, 1);
 
-    r_size = 1; %size of R array   %he? was wollt ich da machen?
+    %counters
+    r_size = 1; %size of R array   
     g_size = 1; %size of G array
     b_size = 1; %size of B array
 
+    %Output-arrays
     images_R = cell(images_nr, 1);
     images_G = cell(images_nr, 1);
     images_B = cell(images_nr, 1);
@@ -22,10 +26,9 @@ function [ images_R, images_G, images_B ] = loadImages( path, images_nr )
     %loading the files from path into images array
     files = dir(path);
     
-    %separate images from returned images array into R, G, B array
-
-    for i = 3:24  %not sure why
-    
+    %separate images from returned images array into R, G, B 
+    %name array
+    for i = 3:24   %not sure why
         %add image file containing _R to R_names array
         r = strfind(files(i).name, '_R');
         if (r ~= 0)
@@ -55,13 +58,7 @@ function [ images_R, images_G, images_B ] = loadImages( path, images_nr )
         images_B{i} = imread(strcat(path, '/', B_names{i}));
     end
     
-    %test
-    figure;
-    imshow(images_R{1});
-    figure;
-    imshow(images_G{1});
-    figure;
-    imshow(images_B{1});
+    %alle images werden korrekt eingelesen 
 end
 
 
