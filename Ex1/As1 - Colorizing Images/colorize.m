@@ -58,8 +58,8 @@ for i = 1:6
     colored_images_RGB{i} = cat(3, chosenR, chosenG, chosenB);
     
     %test
-    figure;
-    imshow(colored_images_RGB{i});
+    %figure;
+    %imshow(colored_images_RGB{i});
 end
 
 

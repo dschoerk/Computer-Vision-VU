@@ -1,19 +1,16 @@
 %loadImages - is a function which loads all images containing 
 %   '_R' from the path, which comes as an input parameter, into 
-%   the R array, all images containing '_G' from the path into 
-%   the G array and all images containing '_B' into the B array.
-%   Finally the three arrays R, G and B are returned.
-
-%loadImages - is a function which loads all files contained by
-%   the given path into the retuned images folder listing.
-%   Finally the images array is returned.
+%   the images_R array, all images containing '_G' from the path 
+%   into the images_G array and all images containing '_B' into 
+%   the B array.
+%   Finally the three arrays images_R, -_G and -_B are returned.
 
 function [ images_R, images_G, images_B ] = loadImages( path, images_nr )
     R_names = cell(images_nr, 1);
     G_names = cell(images_nr, 1);
     B_names = cell(images_nr, 1);
 
-    r_size = 1; %size of R array
+    r_size = 1; %size of R array   %he? was wollt ich da machen?
     g_size = 1; %size of G array
     b_size = 1; %size of B array
 
@@ -57,6 +54,14 @@ function [ images_R, images_G, images_B ] = loadImages( path, images_nr )
         images_G{i} = imread(strcat(path, '/', G_names{i}));
         images_B{i} = imread(strcat(path, '/', B_names{i}));
     end
+    
+    %test
+    figure;
+    imshow(images_R{1});
+    figure;
+    imshow(images_G{1});
+    figure;
+    imshow(images_B{1});
 end
 
 
