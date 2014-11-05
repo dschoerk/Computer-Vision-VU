@@ -26,9 +26,17 @@ function [ images_R, images_G, images_B ] = loadImages( path, images_nr )
     %loading the files from path into images array
     files = dir(path);
     
+    %test
+    files(1).name
+    files(2).name
+    files(3).name
+    files(27).name
+    files(28).name
+    files(29).name
+    
     %separate images from returned images array into R, G, B 
     %name array
-    for i = 3:24   %not sure why
+    for i = 3:29   %(images_nr + 2)   %not sure why
         %add image file containing _R to R_names array
         r = strfind(files(i).name, '_R');
         if (r ~= 0)
