@@ -4,7 +4,7 @@ D = 3; % 3 or 5
 r = []; %mapping of the points to the clusters
 J_old = inf; %initial value of J_old, have been bigger then the start value of J
 J = 10;
-epsilon = 1; %
+epsilon = 2; %
 
 % reading the input file
 img = imread(path);
@@ -36,10 +36,9 @@ end
 
 while abs(J_old - J) > epsilon 
 
-            test = J_old - J
     J_old = J;
 
-    data = [];
+    data = []; %stores the currend data information
     %initialize the matrices
     r = zeros(dim(1)*dim(2),K); %mapping matrix
     sum_k = zeros(K,D); %matrix for the summ of the distances for each cluster
@@ -61,11 +60,12 @@ while abs(J_old - J) > epsilon
                 data(5) = j/dim(2);
             end
             
-            mindist = inf;
-            index = 0;
+            mindist = inf; % initial minimal distance is infinity
+            index = 0; %initial index of the centroid with minimal distance is 0 to detect problems
             for k = 1:1:K
                 %dist(pos) = (pdist([data(pos,:);my_k(k,:)],'euclidean'))^2;
-                dist(pos,k) = (pdist([data;my_k(k,:)],'euclidean'))^2;
+                %dist(pos,k) = (pdist([data;my_k(k,:)],'euclidean'))^2;
+                dist(pos,k) = sum((data - my_k(k,:)).^2);
                 if(dist(pos,k) < mindist) %searches for the minimum distance of the datapoint to the clusters
                     mindist = dist(pos,k);
                     index = k;
@@ -80,7 +80,7 @@ while abs(J_old - J) > epsilon
     end
     
     J = sum(sum(dist));
-    if abs(J_old - J) <= epsilon
+    if abs(J_old - J) <= epsilon %breaking condition of the main loop
         break
     end
     
@@ -92,6 +92,7 @@ while abs(J_old - J) > epsilon
             new_y = fix(exaktpos/dim(1))+1; %y-coordinate in the imige
             new_x = mod(exaktpos ,dim(1)); %x-coordinate in the image
             
+            %set the new parameters of my_k (k)
             my_k(k,1) = img (new_x,new_y,1);
             my_k(k,2) = img (new_x,new_y,2);
             my_k(k,3) = img (new_x,new_y,3);
@@ -105,3 +106,24 @@ while abs(J_old - J) > epsilon
     end
     %J = sum(sum(dist));
 end
+
+image(img);
+hold on;
+%drawing loop
+for i = 1:1:dim(1)
+        for j = 1:1:dim(2)
+            pos = (i-1)*dim(2)+j;
+            if i == 1 || i == dim(1) || j == 1|| j == dim(2)
+                %plot(j,i,'b.');
+                [val,dex] = max(r(pos,:)); 
+                plot(j,i,'*','Color',[1-my_k(dex,1) 1-my_k(dex,2) 1-my_k(dex,3)]);
+            else
+                if any(r(pos,:) == r(pos+1,:) == 0) || any(r(pos-1,:) == r(pos,:) == 0) || any(r(pos,:) == r(pos-dim(2),:) == 0) || any(r(pos,:) == r(pos+dim(2),:) == 0);
+                    %plot(j,i,'b.');
+                    [val,dex] = max(r(pos,:)); 
+                    plot(j,i,'*','Color',[1-my_k(dex,1) 1-my_k(dex,2) 1-my_k(dex,3)]);
+                end
+            end
+        end
+end
+hold off;
