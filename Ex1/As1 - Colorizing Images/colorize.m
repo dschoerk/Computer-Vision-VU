@@ -2,10 +2,12 @@
 
 %variables
 path = '../resources'; 
-images_nr = 9; %6
+images_nr = 6; %9
 
 %call loadImages function
 [images_R, images_G, images_B] = loadImages(path, images_nr);
+
+tic;
 
 %variables for automatical alignment
 %[m, n] = size(images_R{1});
@@ -59,12 +61,11 @@ for i = 1:images_nr
     %test
     figure;
     imshow(colored_images_RGB{i});
-    
-    %colored image 3 ist nicht perfekt...
+ 
 end
 
 
-
+toc;
 
 
 
