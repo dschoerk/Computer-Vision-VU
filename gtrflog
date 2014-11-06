@@ -1,0 +1,85 @@
+[33mcommit 5c9b20f47700c9dfe0b515dbcc005f28342da761[m
+Merge: a57d79d 6af88e8
+Author: unknown <a.sheldon@gmx.at>
+Date:   Thu Nov 6 14:22:30 2014 +0100
+
+    Merge branch 'master' of https://github.com/oggs91/Computer-Vision-VU
+
+[33mcommit a57d79d71e24abd847e26966df40a422a8000f87[m
+Author: unknown <a.sheldon@gmx.at>
+Date:   Thu Nov 6 14:21:04 2014 +0100
+
+    Finale, funktionierende Version. Mal sehen ob ich die performance noch verbessern kann.
+
+[33mcommit 6af88e81eda62dbbca0bae54fe5b980eb9af2248[m
+Author: Oana Moraru <tsunade_oana@yahoo.com>
+Date:   Wed Nov 5 22:22:23 2014 +0100
+
+    added new high resolution images
+
+[33mcommit be1c4f9d89c379c1b46ad9d6887cb358bdc150ad[m
+Author: unknown <a.sheldon@gmx.at>
+Date:   Sat Nov 1 17:30:26 2014 +0100
+
+    Wenn ein Cluster keine Elemente hat, wird nun der entfernteste Punkt aller Cluster als neuer Centroid gewählt. Sieht richtig aus muss das aber morgen oder so nochmal checken.
+
+[33mcommit d2bd791c9482eee943b9da2cf3daa6b359f56419[m
+Author: Oana Moraru <tsunade_oana@yahoo.com>
+Date:   Thu Oct 30 12:40:12 2014 +0100
+
+    added Doc file
+
+[33mcommit 028c2a077d3f04fa6ea97f997496f51f12df83ad[m
+Author: Oana Moraru <tsunade_oana@yahoo.com>
+Date:   Thu Oct 30 12:17:05 2014 +0100
+
+    colorizing images funktioniert jetzt ^^
+
+[33mcommit 29cfa2a6f1b9c5c3710cce0bebb7792f03b10fea[m
+Author: Oana Moraru <tsunade_oana@yahoo.com>
+Date:   Thu Oct 30 11:56:48 2014 +0100
+
+    images werden korrekt eingelesen
+
+[33mcommit 372ca22f08b069c2f77e733b4f1906886ffc4d33[m
+Author: Oana Moraru <tsunade_oana@yahoo.com>
+Date:   Thu Oct 30 11:41:08 2014 +0100
+
+    debuggin like there is no tomorrow
+
+[33mcommit ee233071b655b88063618e529e56cc74b13701a5[m
+Author: Oana Moraru <tsunade_oana@yahoo.com>
+Date:   Thu Oct 30 11:35:29 2014 +0100
+
+    removed some comments
+
+[33mcommit b09fa9a52d39dc2c4f8bc275c9414c3c6ffc9c5d[m
+Merge: 4ed5d91 bca033b
+Author: Oana Moraru <tsunade_oana@yahoo.com>
+Date:   Thu Oct 30 11:33:13 2014 +0100
+
+    Merge branch 'master' of https://github.com/oggs91/Computer-Vision-VU
+
+[33mcommit bca033b57f66e760289db4f2cc1c87e6a97be977[m
+Author: unknown <a.sheldon@gmx.at>
+Date:   Thu Oct 30 11:33:04 2014 +0100
+
+    Mein vorläufiger Stand
+
+[33mcommit 4ed5d91d8cd1b9fefd90f29935635d811a701f56[m
+Author: Oana Moraru <tsunade_oana@yahoo.com>
+Date:   Thu Oct 30 11:32:24 2014 +0100
+
+    colorizing part Oana - working on it
+
+[33mcommit 303822bb91f49c0b64e57c321da9cd7ae6b954e1[m
+Author: oggs91 <dschoerk@gmx.at>
+Date:   Thu Oct 23 16:54:42 2014 +0200
+
+    Exercise 3 done
+
+[33mcommit 334d347934a6a9e2a24b9a2025f5dfc92d078977[m
+Author: oggs91 <dschoerk@gmx.at>
+Date:   Thu Oct 23 14:34:55 2014 +0200
+
+    init
