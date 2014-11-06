@@ -2,18 +2,19 @@
 
 %variables
 path = '../resources'; 
-images_nr = 6;
+images_nr = 9; %6
 
 %call loadImages function
 [images_R, images_G, images_B] = loadImages(path, images_nr);
 
 %variables for automatical alignment
-[m, n] = size(images_R{1});
+%[m, n] = size(images_R{1});
 colored_images_RGB = cell(images_nr, 1);
 
 %align jeweils 3 images with the best match - do this 6 times,
 %cause there are 6 colored images to be generated
-for i = 1:6
+for i = 1:images_nr
+    [m, n] = size(images_R{i});
     tempCorrR = 0;
     tempCorrG = 0;
     bestCorrR = 0;
