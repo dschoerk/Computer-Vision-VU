@@ -15,7 +15,7 @@ colored_images_RGB = cell(images_nr, 1);
 
 %align jeweils 3 images with the best match - do this 6 times,
 %cause there are 6 colored images to be generated
-for i = 1:images_nr
+for i = 1:1%images_nr
     [m, n] = size(images_R{i});
     tempCorrR = 0;
     tempCorrG = 0;
