@@ -3,23 +3,28 @@
 %   Detailed explanation goes here
 
 
-function [ pyramid, pyramid_channel ] = generatePyramids( image, levels )
+function [ pyramid, pyramid_channel, levels_ ] = generatePyramids( image, kernel_width )
 
 %Output-arrays
-pyramid = cell(levels, 1);
-pyramid_channel = cell(levels, 1);
+pyramid = cell(20, 1);   % 20 = ausreichend grosse array size, die auf jeden fall alle pyramiden umfassen soll
+pyramid_channel = cell(20, 1);
 
-    img = image;
-    pyramid{1} = img;
+    pyramid{1} = image;
     tempPy = pyramid{1};
     pyramid_channel{1} = tempPy(:,:,1);
-    %computing a level-times multiresolution pyramid of 
-    %the initial image image.
-    for i = 2:levels  
-        pyramid{i} = impyramid(pyramid{i-1}, 'reduce');
-        tempPy = pyramid{i};
-        pyramid_channel{i} = tempPy(:,:,1);
+    
+    [m, n] = size(pyramid_channel{1});
+    j = 1;
+    kernel_size = kernel_width * 2 + 1;
+    while (m > (4 * kernel_size))
+        j = j + 1;
+        pyramid{j} = impyramid(pyramid{j-1}, 'reduce');
+        tempPy = pyramid{j};
+        pyramid_channel{j} = tempPy(:,:,1);
+        
+        [m, n] = size(pyramid_channel{j});
     end
-
+    
+    levels_ = j;
 end
 
