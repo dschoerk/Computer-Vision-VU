@@ -13,9 +13,9 @@ tic;
 
 kernel_breite = 2;
 
-[pyramid_R, pyramid_R_channel, levels] = generatePyramids( images_R{1}, kernel_breite );
-[pyramid_G, pyramid_G_channel, levels] = generatePyramids( images_G{1}, kernel_breite );
-[pyramid_B, pyramid_B_channel, levels] = generatePyramids( images_B{1}, kernel_breite );
+[pyramid_R, pyramid_R_channel, levels] = generatePyramids( images_R{8}, kernel_breite );
+[pyramid_G, pyramid_G_channel, levels] = generatePyramids( images_G{8}, kernel_breite );
+[pyramid_B, pyramid_B_channel, levels] = generatePyramids( images_B{8}, kernel_breite );
 
 levels
 %function [ pyramid, pyramid_channel, levels_ ] = generatePyramids( image, kernel_width )
