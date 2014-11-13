@@ -22,7 +22,6 @@ function [ images_R, images_G, images_B ] = loadImages( path, images_nr )
     images_G = cell(images_nr, 1);
     images_B = cell(images_nr, 1);
 
-
     %loading the files from path into images array
     files = dir(path);
     
@@ -57,8 +56,6 @@ function [ images_R, images_G, images_B ] = loadImages( path, images_nr )
         images_G{i} = imread(strcat(path, '/', G_names{i}));
         images_B{i} = imread(strcat(path, '/', B_names{i}));
     end
-    
-    %alle images werden korrekt eingelesen 
 end
 
 
