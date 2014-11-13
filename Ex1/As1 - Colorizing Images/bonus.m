@@ -27,7 +27,7 @@ kernel_breite = 2;
 [pyramid_B, pyramid_B_channel, levels] = generatePyramids( images_B{8}, kernel_breite );
 
 %output: number of levels of current pyramids (the same for all channel images)
-levels
+%levels
 
 %initialization of required variables
 [m, n] = size(pyramid_R_channel{1});
