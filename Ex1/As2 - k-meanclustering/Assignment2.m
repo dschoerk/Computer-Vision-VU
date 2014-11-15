@@ -1,6 +1,6 @@
-path = 'E:\TU_Andi/Computervision/simple.PNG';
-K = 3; % number of clusters
-D = 3; % 3 or 5
+path = 'E:\TU_Andi/Computervision/mm.jpg';
+K = 5; % number of clusters
+D = 5; % 3 or 5
 r = []; %mapping of the points to the clusters
 J_old = inf; %initial value of J_old, have been bigger then the start value of J
 J = 10;
@@ -23,11 +23,11 @@ if D == 3
     end
 else
     for i=1:1:K %Colours and positions
-            my_k(i,1) = my_kx(i)/dim(1); %normalize the position [0,1]
-            my_k(i,2) = my_ky(i)/dim(2); % same here
-            my_k(i,3) = img(my_kx(i),my_ky(i),1);
-            my_k(i,4) = img(my_kx(i),my_ky(i),2);
-            my_k(i,5) = img(my_kx(i),my_ky(i),3);
+            my_k(i,1) = img(my_kx(i),my_ky(i),1);
+            my_k(i,2) = img(my_kx(i),my_ky(i),2);
+            my_k(i,3) = img(my_kx(i),my_ky(i),3);
+            my_k(i,4) = my_kx(i)/dim(1); %normalize the position [0,1]
+            my_k(i,5) = my_ky(i)/dim(2); % same here
     end
 end
 
@@ -125,5 +125,10 @@ for i = 1:1:dim(1)
                 end
             end
         end
+end
+if D == 5
+    for i = 1:1:K
+        plot(my_k(i,5)*dim(2),my_k(i,4)*dim(1),'o','Color',[1-my_k(i,1) 1-my_k(i,2) 1-my_k(i,3)]);
+    end
 end
 hold off;
