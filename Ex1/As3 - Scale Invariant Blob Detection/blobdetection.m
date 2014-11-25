@@ -7,14 +7,16 @@ function [blobx, bloby, radii, pyr_images, localMax] = blobdetection(img, sigma_
         % generate kernel for level i
         kernelSize = 2*floor(3*sigma)+1; % see docu and imfilter
         kernel = fspecial('log', kernelSize, sigma);
-        sigma = sigma * k;
-
+        
         % generate pyramid image level i
         pyr_images(:,:,i) = imfilter(1-img, kernel, 'same', 'replicate');
         pyr_images(:,:,i) = pyr_images(:,:,i) .* (sigma * sigma);
-        pyr_images(:,:,i) = pyr_images(:,:,i) .* (pyr_images(:,:,i) > threshold);
         %figure; imshow(pyr_images(:,:,i));
+        
+        pyr_images(:,:,i) = pyr_images(:,:,i) .* (pyr_images(:,:,i) > threshold);
+        sigma = sigma * k;
     end
+
 
     localMax = zeros(dim(1), dim(2), levels);
 

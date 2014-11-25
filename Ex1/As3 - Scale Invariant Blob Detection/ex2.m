@@ -4,10 +4,13 @@ function [] = ex2
     levels = 10; % const, pyramid levels
     k = 1.2; % const, sigma scale factor
     threshold = 0.3; % const, minimum blob threshold
-    path = '../resources/butterfly.jpg';
+    path = '../resources/zebra.jpg';
 
     % reading the input file
     img = imread(path);
+    if(size(img,3) == 3)
+        img = rgb2gray(img);
+    end
     img = im2double(img);
     dim = size(img);
     img_half = imresize(img, dim * 0.5);
