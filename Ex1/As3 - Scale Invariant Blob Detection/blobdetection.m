@@ -15,8 +15,12 @@ function [blobx, bloby, radii, pyr_images, localMax] = blobdetection(img, sigma_
         
         pyr_images(:,:,i) = pyr_images(:,:,i) .* (pyr_images(:,:,i) > threshold);
         sigma = sigma * k;
+        
+        figure;
+        imshow(pyr_images(:,:,i));
     end
 
+    
 
     localMax = zeros(dim(1), dim(2), levels);
 
