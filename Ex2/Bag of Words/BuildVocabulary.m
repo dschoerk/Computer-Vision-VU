@@ -36,67 +36,40 @@ function [ C_matrix ] = BuildVocabulary( folder, num_clusters )
 %   can be used here for performance reasons. The words are finally 
 %   stored in the matrix C of size 128 num_clusters.
 
-    % try to read files out of all subfolders of "folder"
-    path = 'train'; 
-    path1 = 'train/bedroom'; 
-    path2 = 'train/forest'; 
-    path3 = 'train/kitchen'; 
-    path4 = 'train/livingroom'; 
-    path5 = 'train/mountain'; 
-    path6 = 'train/office'; 
-    path7 = 'train/store'; 
-    path8 = 'train/street'; 
-
     
     %array where all 800 images are to be saved
     all_jpg_images = cell(800, 1); %(800, 1);
-    
-    % iterate all images: function dir
-    files = dir(folder)
- %   files(3).name   %3 = bedroom, 10 = street
 
+    % counter images in final array: all_jpg_images
+    counter = 1;
+    
+    files_in_main_folder = dir(folder)
+    % size(files_in_main_folder) = 10 , 2 = 10 -> elements start at 3:10 ->
+    % 8 elements
+    
     for i = 1:8 %nr subfolders = 8
-        i
-        string = strcat('train/', files(i+2).name)
+        foldername = files_in_main_folder(i+2).name;
+        folderpath = fullfile(folder, foldername);    %fullfile bastelt aus ordnernamen und filenamen einen pfad
+        files_in_subfolder = dir(folderpath)
+        % size(files_in_subfolder) = 102, 2 = 102 -> elements start at
+        % 3:102 -> 100 elements
         
-        % read all 100 images from subfolder nr i+2
-        temp_imgs = dir(string);
-       % size_temp_imgs = size(temp_imgs)
-        
-        %test
-   %     m = 0;
-   %     for k = (((i-1)*100) + 1) : (100 * i)
-   %         m = m + 1;
-   %     end
-   %     m
-        
-   %     n = 0;
-   %     for l = 3:102
-   %         n = n + 1;
-   %     end
-   %     n
-
-%     temp_imgs(3:102).name   %all_jpg_images{i,:} = 
-%     {all_jpg_images{1 : 100}}
-       
-      all_jpg_images{(((i-1)*100) + 1) : (100 * i)} = temp_imgs(3:102).name;    
-      %     all_jpg_images{1 : 100} = temp_imgs(3:102).name;    
-                                                  %1:100} = temp_imgs(1:100).name;
-
-    % Wie ich auf die Formel gekommen bin... :     
-    %    1 : 100 ->         101 : 200 ->       201 : 300 -> 301 : 400 -> 401 : 500 -> ... -> 701 : 800
-    %    (i-1)*100 + 1 =    (i-1)*100+1 =
-    %      0  *100 + 1 = 1    1  *100+1 = 101
-    %     100 * i = 100     100 * i = 200 
-    %
-    %   ... -> 701 : 800
-    %          (i-1)*100 + 1 = 
-    %            7  *100 + 1 = 701
-    %          100 * i = 800
-    
+        for j = 1:100 %nr elements (imgs) in subfolder = 100
+            fullpath = fullfile(folderpath, files_in_subfolder(j+2).name);
+            image = imread(fullpath);
+            all_jpg_images{counter} = image;
+            counter = counter + 1;
+        end
     end
     
-    % all_jpg_images
+    %all_jpg_images
+    %size(all_jpg_images)
     
+    % Images sind nun eingelesen und alle in einem array gespeichert
+    
+    % TODO weiter
+    
+    
+   
 end
 
