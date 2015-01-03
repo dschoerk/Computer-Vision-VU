@@ -3,8 +3,8 @@
 
 
 
-C = BuildVocabulary(folder, num_clusters);
+C = BuildVocabulary('train', 50);
 
-% [training, group] = BuildKNN(folder,C);
+% [training, group] = BuildKNN('train', C);
 
 % conf_matrix = ClassifyImages(folder,C,training,group);
