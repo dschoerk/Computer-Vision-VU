@@ -3,7 +3,7 @@
 
 
 
-% C = BuildVocabulary(folder, num_clusters);
+C = BuildVocabulary(folder, num_clusters);
 
 % [training, group] = BuildKNN(folder,C);
 

@@ -36,21 +36,23 @@ function [ C_matrix ] = BuildVocabulary( folder, num_clusters )
 %   can be used here for performance reasons. The words are finally 
 %   stored in the matrix C of size 128 num_clusters.
 
-    
+    % DECLARATIONS
     %array where all 800 images are to be saved
     all_jpg_images = cell(800, 1); %(800, 1);
 
+    %features = cell(800, 1);
+    
     % counter images in final array: all_jpg_images
     counter = 1;
     
-    files_in_main_folder = dir(folder)
+    % IMAGES EINLESEN
+    files_in_main_folder = dir(folder);
     % size(files_in_main_folder) = 10 , 2 = 10 -> elements start at 3:10 ->
     % 8 elements
-    
     for i = 1:8 %nr subfolders = 8
         foldername = files_in_main_folder(i+2).name;
         folderpath = fullfile(folder, foldername);    %fullfile bastelt aus ordnernamen und filenamen einen pfad
-        files_in_subfolder = dir(folderpath)
+        files_in_subfolder = dir(folderpath);
         % size(files_in_subfolder) = 102, 2 = 102 -> elements start at
         % 3:102 -> 100 elements
         
@@ -61,15 +63,54 @@ function [ C_matrix ] = BuildVocabulary( folder, num_clusters )
             counter = counter + 1;
         end
     end
+
+    % SIFT  FEATURE EXTRACTION
+    % vl_dsift: [FRAMES,DESCRS] = VL_DSIFT(I) extracts a dense set of SIFT 
+    %   keypoints from image I. 
+    %   - I must be of class SINGLE and grayscale. 
+    %   - FRAMES is a 2 x NUMKEYPOINTS, each colum storing the center (X,Y) 
+    %   of a keypoint frame (all frames have the same scale and orientation). 
+    %   - DESCRS is a 128 x NUMKEYPOINTS matrix with one descriptor per column
+    % 
+    %calculate necessary step size, so that ~100 features (NUMKEYPOINTS)
+    %will be extracted:
+    size_x = size(all_jpg_images{1}, 2);
+    size_y = size(all_jpg_images{1}, 1);
+    step = floor(sqrt((size_x * size_y)/100));
+    % collect all SIFT features
+    [all_frames, all_descriptors] = vl_dsift(single(all_jpg_images{1}), 'step', step, 'fast');
+%    features{1} = all_descriptors;
+    for k = 2:800
+        %calculate necessary step size, so that ~100 features (NUMKEYPOINTS)
+        %will be extracted:
+        % formula: step = floor(sqrt((size_x * size_y)/100));
+        size_x = size(all_jpg_images{k}, 2);
+        size_y = size(all_jpg_images{k}, 1);
+        step = floor(sqrt((size_x * size_y)/100));
+        
+        % features of current image
+        [frames, descriptors] = vl_dsift(single(all_jpg_images{k}), 'step', step, 'fast');
+        % joining values of frames and descriptors by horizontally concatenating the
+        % matrices
+        % concatenate extracted features from current image to all until now
+        % accumulated features: horizontal concatenation [a b]
+        all_frames = [all_frames frames];                    % vertical concatenation: [a; b]
+        all_descriptors = [all_descriptors descriptors];
+        % or
+%        features{k} = descriptors;
+    end
+
+    % K-MEANS CLUSTERING
+    % [C, A] = VL_KMEANS(X, NUMCENTERS) clusters the columns of the matrix X 
+    % in NUMCENTERS centers C using k-means. 
+    % - X may be either SINGLE or DOUBLE. 
+    % - C has the same number of rows of X and NUMCENTER columns, with one column 
+    % per center. 
+    % - A is a UINT32 row vector specifying the assignments of the data X to the 
+    % NUMCENTER centers. 
+
+    [C_matrix, A] = vl_kmeans(single(all_descriptors), num_clusters);
     
-    %all_jpg_images
-    %size(all_jpg_images)
-    
-    % Images sind nun eingelesen und alle in einem array gespeichert
-    
-    % TODO weiter
-    
-    
-   
+    size_C_matrix = size(C_matrix)
 end
 
