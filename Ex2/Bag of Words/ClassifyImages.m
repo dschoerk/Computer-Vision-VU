@@ -1,4 +1,4 @@
-function [ conf_matrix ] = ClassifyImages( folder, C, training, group )
+function [ conf_matrix, class ] = ClassifyImages( folder, C, training, group )
 %CLASSIFYIMAGES 
 %   classify all the images of the test set (in order to investigate the 
 %   classification power of the bag of visual words model for our classification 
@@ -13,6 +13,7 @@ function [ conf_matrix ] = ClassifyImages( folder, C, training, group )
     % DECLARATIONS
     % Sample -  Matrix whose rows will be classified into groups. Must have the same number of columns as Training.
     sample = [];
+    conf_matrix = zeros(8,8);
 
     % die 800 images of the test Set EINLESEN
     all_jpg_images = readInFiles(folder);
@@ -47,14 +48,16 @@ function [ conf_matrix ] = ClassifyImages( folder, C, training, group )
     sample = transpose(sample);
     
     %% CLASSIFY all images of the test set
-    class = knnclassify(sample, training, group, 3)  % k = 3
+    class = knnclassify(sample, training, group, 3);  % k = 3
      
-    
-    
-    
-    
-
-
+    %% build CONF_MATRIX
+    % elements at position (i; j) indicate how often an image with class label i 
+    % is classified to the class with label j
+    for k = 1:800
+        %fill conf_matrix with values: how often was img with class label
+        %i, classified as an image belonging to class j
+        conf_matrix(group(k), class(k)) = conf_matrix(group(k), class(k)) + 1;
+    end
 
 end
 
