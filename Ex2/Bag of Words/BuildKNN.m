@@ -1,4 +1,4 @@
-function [ training, group ] = BuildKNN( folder, C )
+function [ training, group, all_jpg_images ] = BuildKNN( folder, C )
 %BUILDKNN Summary of this function goes here
 %   build a feature representation for every image in the training set,
 %   that can be used for the classification of new images later on.
@@ -19,34 +19,20 @@ function [ training, group ] = BuildKNN( folder, C )
     % For any new SIFT feature we observe, we can figure out which cluster
     % it belongs to as long as we save the centroids of our original clusters.
 
-    % extract all SIFT features of images (step  = 1 or 2)
-    all_jpg_images = cell(800, 1); 
-    counter = 1;
-    files_in_main_folder = dir(folder);
-    training = []; %zeros(800,50); 
+    training = [];        %zeros(800,50); 
     group = zeros(800,1); %column vec with 800 items
-    % EINLESEN
-    for i = 1:8 %nr subfolders = 8
-        foldername = files_in_main_folder(i+2).name;
-        folderpath = fullfile(folder, foldername);    %fullfile bastelt aus ordnernamen und filenamen einen pfad
-        files_in_subfolder = dir(folderpath);
-        % size(files_in_subfolder) = 102, 2 = 102 -> elements start at
-        % 3:102 -> 100 elements
     
-       for j = 1:100 %nr elements (imgs) in subfolder = 100
-            fullpath = fullfile(folderpath, files_in_subfolder(j+2).name);
-            image = imread(fullpath);
-            all_jpg_images{counter} = image;
-            counter = counter + 1;
-       end
-    end
+    % die 800 imgs EINLESEN
+    all_jpg_images = readInFiles(folder);
+
     % SIFT  FEATURE EXTRACTION
+    % extract all SIFT features of images (step  = 1 or 2)
     for k = 1:800
         % features of current image
         [frames, descriptors] = vl_dsift(single(all_jpg_images{k}), 'step', 2, 'fast');
        
-        % SIFT features are assigned to visual words in C
-        %   - with knnsearch
+        % SIFT features are assigned to visual words in vocabulary C
+        % - with knnsearch
         %   IDX = knnsearch(X,Y) -> finds the nearest neighbor in X for each point in Y.
         %   IDX is a column vector with my rows. Each row in IDX contains the index of
         %   nearest neighbor in X for the corresponding row in Y.
@@ -54,7 +40,7 @@ function [ training, group ] = BuildKNN( folder, C )
         transposed_C = transpose(C);
         Idx = knnsearch(transposed_C, transposed_descriptors);
     
-        % +  number of occurrences of every word is counted
+        % number of occurrences of every word is counted
         %   - with histc
         binranges = 1:50;
         vec_hist_count = histc(Idx, binranges);

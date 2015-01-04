@@ -36,33 +36,8 @@ function [ C_matrix ] = BuildVocabulary( folder, num_clusters )
 %   can be used here for performance reasons. The words are finally 
 %   stored in the matrix C of size 128 num_clusters.
 
-    % DECLARATIONS
-    %array where all 800 images are to be saved
-    all_jpg_images = cell(800, 1); %(800, 1);
-
-    %features = cell(800, 1);
-    
-    % counter images in final array: all_jpg_images
-    counter = 1;
-    
-    % IMAGES EINLESEN
-    files_in_main_folder = dir(folder);
-    % size(files_in_main_folder) = 10 , 2 = 10 -> elements start at 3:10 ->
-    % 8 elements
-    for i = 1:8 %nr subfolders = 8
-        foldername = files_in_main_folder(i+2).name;
-        folderpath = fullfile(folder, foldername);    %fullfile bastelt aus ordnernamen und filenamen einen pfad
-        files_in_subfolder = dir(folderpath);
-        % size(files_in_subfolder) = 102, 2 = 102 -> elements start at
-        % 3:102 -> 100 elements
-        
-        for j = 1:100 %nr elements (imgs) in subfolder = 100
-            fullpath = fullfile(folderpath, files_in_subfolder(j+2).name);
-            image = imread(fullpath);
-            all_jpg_images{counter} = image;
-            counter = counter + 1;
-        end
-    end
+    % die 800 IMAGES EINLESEN
+    all_jpg_images = readInFiles(folder);
 
     % SIFT  FEATURE EXTRACTION
     % vl_dsift: [FRAMES,DESCRS] = VL_DSIFT(I) extracts a dense set of SIFT 
@@ -108,9 +83,7 @@ function [ C_matrix ] = BuildVocabulary( folder, num_clusters )
     % per center. 
     % - A is a UINT32 row vector specifying the assignments of the data X to the 
     % NUMCENTER centers. 
-
     [C_matrix, A] = vl_kmeans(single(all_descriptors), num_clusters);
-    
-    size_C_matrix = size(C_matrix)
+
 end
 
