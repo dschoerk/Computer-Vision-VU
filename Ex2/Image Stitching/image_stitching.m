@@ -11,8 +11,8 @@ function image_stitching
         color_im = im2double(imread(path));
         single_im = single(rgb2gray(color_im));
     end
-    [sImg1, cImg1] = loadIm('officeview1.jpg');
-    [sImg2, cImg2] = loadIm('officeview2.jpg');
+    [sImg1, cImg1] = loadIm('campus2.jpg');
+    [sImg2, cImg2] = loadIm('campus3.jpg');
     [f1,d1] = vl_sift(sImg1);
     [f2,d2] = vl_sift(sImg2);
     
@@ -29,7 +29,7 @@ function image_stitching
     best_trafo = [];
     best_inliers_num = 0;
     best_inliers = [];
-    for i=1:10000
+    for i=1:1000
         % choose 4 random match indices
         chosen = randsample(numMatches, 4);
         chosenPointsIm1 = f1(1:2, matches(1, chosen));
@@ -40,7 +40,7 @@ function image_stitching
             trafo = cp2tform(chosenPointsIm1', chosenPointsIm2', 'projective');
             [X Y] = tformfwd(trafo, f1(1, matches(1, :))', f1(2, matches(1, :))');
             pa = [X Y];
-            pb = f2(1:2, matches(1, :))';
+            pb = f2(1:2, matches(2, :))';
             inliers = sum((pa-pb).^2, 2) < 5^2;
             inlier_num = sum(inliers);
             if(inlier_num > best_inliers_num)
@@ -63,5 +63,6 @@ function image_stitching
     
     sImg1_transformed = imtransform(sImg1, best_trafo,'xdata',[1,size(sImg2,2)],'ydata',[1,size(sImg2,1)],'xyscale',[1,1]);
     mask = (sImg1_transformed > 0);
+    figure;
     imshow(mask .* sImg1_transformed + ~mask .* sImg2);
 end
