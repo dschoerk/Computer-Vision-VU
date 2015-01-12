@@ -11,8 +11,8 @@ function image_stitching
         color_im = im2double(imread(path));
         single_im = single(rgb2gray(color_im));
     end
-    [sImg1, cImg1] = loadIm('campus2.jpg');
-    [sImg2, cImg2] = loadIm('campus3.jpg');
+    [sImg1, cImg1] = loadIm('campus2_transformed.jpg');
+    [sImg2, cImg2] = loadIm('campus1.jpg');
     [f1,d1] = vl_sift(sImg1);
     [f2,d2] = vl_sift(sImg2);
     
@@ -61,8 +61,11 @@ function image_stitching
     reestimatePoints2 = f2(1:2, matches(2, best_inliers));
     best_trafo = cp2tform(reestimatePoints1', reestimatePoints2', 'projective');
     
+    match_plot(sImg1, sImg2, f1(1:2, matches(1, best_inliers))', f2(1:2, matches(2, best_inliers))');
+    
     sImg1_transformed = imtransform(sImg1, best_trafo,'xdata',[1,size(sImg2,2)],'ydata',[1,size(sImg2,1)],'xyscale',[1,1]);
     mask = (sImg1_transformed > 0);
     figure;
     imshow(mask .* sImg1_transformed + ~mask .* sImg2);
+    imshow(abs(sImg1_transformed-sImg2));
 end
