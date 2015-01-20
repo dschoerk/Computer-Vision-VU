@@ -17,12 +17,20 @@ function [ conf_matrix, class ] = ClassifyImages( folder, C, training, group )
 
     % die 800 images of the test Set EINLESEN
     all_jpg_images = readInFiles(folder);
+    if(size(all_jpg_images{4},1) == 0)
+        n = 1;
+    else
+        n = 800;
+    end
     
     % SIFT  FEATURE EXTRACTION
     % extract all SIFT features of images (step  = 1 or 2)
-    for k = 1:800
+    for k = 1:n
         % features of current image
-        [frames, descriptors] = vl_dsift(single(all_jpg_images{k}), 'step', 2, 'fast');
+        img = im2double(all_jpg_images{k});
+        img = rgb2gray(img);
+        img = single(img);
+        [frames, descriptors] = vl_dsift(img, 'step', 2, 'fast');
       
         % SIFT features are assigned to visual words in vocabulary C
         % - with knnsearch
@@ -53,10 +61,17 @@ function [ conf_matrix, class ] = ClassifyImages( folder, C, training, group )
     %% build CONF_MATRIX
     % elements at position (i; j) indicate how often an image with class label i 
     % is classified to the class with label j
-    for k = 1:800
+    size_class = size(class, 1);
+    if(size_class ~= 800)
         %fill conf_matrix with values: how often was img with class label
         %i, classified as an image belonging to class j
-        conf_matrix(group(k), class(k)) = conf_matrix(group(k), class(k)) + 1;
+        conf_matrix(group(k), class(1)) = conf_matrix(group(k), class(1)) + 1;
+    else
+        for k = 1:800
+            %fill conf_matrix with values: how often was img with class label
+            %i, classified as an image belonging to class j
+            conf_matrix(group(k), class(k)) = conf_matrix(group(k), class(k)) + 1;
+        end
     end
 
 end

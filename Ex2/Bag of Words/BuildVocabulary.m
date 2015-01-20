@@ -47,11 +47,17 @@ function [ C_matrix ] = BuildVocabulary( folder, num_clusters )
     %   of a keypoint frame (all frames have the same scale and orientation). 
     %   - DESCRS is a 128 x NUMKEYPOINTS matrix with one descriptor per column
     % 
-    %calculate necessary step size, so that ~100 features (NUMKEYPOINTS)
+    %calculate necessary step size, so that ~100 features (NUMKEYPOINTS) per image 
     %will be extracted:
     size_x = size(all_jpg_images{1}, 2);
     size_y = size(all_jpg_images{1}, 1);
-    step = floor(sqrt((size_x * size_y)/100));
+    
+    val = floor(sqrt((size_x * size_y)/100));
+    if (val == 0)
+        step = 2;
+    else
+        step = val;
+    end
     % collect all SIFT features
     [all_frames, all_descriptors] = vl_dsift(single(all_jpg_images{1}), 'step', step, 'fast');
 %    features{1} = all_descriptors;
@@ -61,8 +67,14 @@ function [ C_matrix ] = BuildVocabulary( folder, num_clusters )
         % formula: step = floor(sqrt((size_x * size_y)/100));
         size_x = size(all_jpg_images{k}, 2);
         size_y = size(all_jpg_images{k}, 1);
-        step = floor(sqrt((size_x * size_y)/100));
+        val = floor(sqrt((size_x * size_y)/100));
         
+        val = floor(sqrt((size_x * size_y)/100));
+        if (val == 0)
+            step = 2;
+        else
+            step = val;
+        end
         % features of current image
         [frames, descriptors] = vl_dsift(single(all_jpg_images{k}), 'step', step, 'fast');
         % joining values of frames and descriptors by horizontally concatenating the
@@ -83,7 +95,7 @@ function [ C_matrix ] = BuildVocabulary( folder, num_clusters )
     % per center. 
     % - A is a UINT32 row vector specifying the assignments of the data X to the 
     % NUMCENTER centers. 
-    [C_matrix, A] = vl_kmeans(single(all_descriptors), num_clusters);
+    [C_matrix, A] = vl_kmeans(single(all_descriptors), num_clusters); %[C_matrix, A]
 
 end
 

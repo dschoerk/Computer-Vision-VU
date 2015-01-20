@@ -13,16 +13,30 @@ function [ all_files ] = readInFiles( folder )
     files_in_main_folder = dir(folder);
     % size(files_in_main_folder) = 10 , 2 = 10 -> elements start at 3:10 ->
     % 8 elements
-    for i = 1:8 %nr subfolders = 8
-        foldername = files_in_main_folder(i+2).name;
-        folderpath = fullfile(folder, foldername);    %fullfile bastelt aus ordnernamen und filenamen einen pfad
-        files_in_subfolder = dir(folderpath);
-        % size(files_in_subfolder) = 102, 2 = 102 -> elements start at
-        % 3:102 -> 100 elements
-        
-        for j = 1:100 %nr elements (imgs) in subfolder = 100
-            fullpath = fullfile(folderpath, files_in_subfolder(j+2).name);
-            image = imread(fullpath);
+    n = size(files_in_main_folder, 1);
+    if(n == 10)
+        for i = 1:8 %nr subfolders = 8
+            foldername = files_in_main_folder(i+2).name;
+            folderpath = fullfile(folder, foldername);    %fullfile bastelt aus ordnernamen und filenamen einen pfad
+            files_in_subfolder = dir(folderpath);
+            % size(files_in_subfolder) = 102, 2 = 102 -> elements start at
+            % 3:102 -> 100 elements
+            m = size(files_in_subfolder);
+            
+            for j = 3:m%1:100 %nr elements (imgs) in subfolder = 100
+                fullpath = fullfile(folderpath, files_in_subfolder(j).name); %j+2
+                image = imread(fullpath);
+                all_files{counter} = image;
+                counter = counter + 1;
+            end
+        end
+    end
+    if(n ~= 10)
+        for j = 3:n
+            foldername = files_in_main_folder(j).name;
+            folderpath = fullfile(folder, foldername);    %fullfile bastelt aus ordnernamen und filenamen einen pfad
+            %fullpath = fullfile(folderpath, files_in_main_folder(j).name); %j+2
+            image = imread(folderpath);%folderpath
             all_files{counter} = image;
             counter = counter + 1;
         end
