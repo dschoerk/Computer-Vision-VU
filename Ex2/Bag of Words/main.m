@@ -8,7 +8,7 @@ C = BuildVocabulary('train', 50);
 
 [training, group] = BuildKNN('train', C);
 
-conf_matrix = ClassifyImages('test', C, training, group);
+conf_matrix = ClassifyImages('test_ownImages', C, training, group); %test
 
 % print out resulting confusion matrix
 conf_matrix
