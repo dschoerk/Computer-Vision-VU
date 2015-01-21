@@ -76,12 +76,14 @@ function image_stitching_C
 
    %convert the Matrices in projective2d, to use the function outputLimits.  
    H3tmp = projective2d();  %projection of image3 is the identity
-   H3 = maketform('projective', H3tmp.T);
+   %H3 = maketform('projective', H3tmp.T);
+   Identity = [ 1 0 0; 0 1 0; 0 0 1];
+   H3 = maketform('projective', Identity);
    
-   H13tmp = projective2d(H23.tdata.T * H12.tdata.T);
-   H23tmp = projective2d(H23.tdata.T);
-   H43tmp = projective2d(H34.tdata.Tinv);
-   H53tmp = projective2d(H34.tdata.Tinv * H45.tdata.Tinv);
+   %H13tmp = projective2d(H23.tdata.T * H12.tdata.T);
+   %H23tmp = projective2d(H23.tdata.T);
+   %H43tmp = projective2d(H34.tdata.Tinv);
+   %H53tmp = projective2d(H34.tdata.Tinv * H45.tdata.Tinv);
     
     %get the sizes of the images
     size1 = size(sImg1);
@@ -91,18 +93,18 @@ function image_stitching_C
     size5 = size(sImg5);
     
     %get the x and y limit from each image     
-    [xlimits(1,:), ylimits(1,:)] = outputLimits(H13tmp, [1 size1(2)], [1 size1(1)]);    
-    [xlimits(2,:), ylimits(2,:)] = outputLimits(H23tmp, [1 size2(2)], [1 size2(1)]);
-    [xlimits(3,:), ylimits(3,:)] = outputLimits(H3tmp, [1 size3(2)], [1 size3(1)]);
-    [xlimits(4,:), ylimits(4,:)] = outputLimits(H43tmp, [1 size4(2)], [1 size4(1)]);
-    [xlimits(5,:), ylimits(5,:)] = outputLimits(H53tmp, [1 size5(2)], [1 size5(1)]);
+    %[xlimits(1,:), ylimits(1,:)] = outputLimits(H13tmp, [1 size1(2)], [1 size1(1)]);    
+    %[xlimits(2,:), ylimits(2,:)] = outputLimits(H23tmp, [1 size2(2)], [1 size2(1)]);
+    %[xlimits(3,:), ylimits(3,:)] = outputLimits(H3tmp, [1 size3(2)], [1 size3(1)]);
+    %[xlimits(4,:), ylimits(4,:)] = outputLimits(H43tmp, [1 size4(2)], [1 size4(1)]);
+    %[xlimits(5,:), ylimits(5,:)] = outputLimits(H53tmp, [1 size5(2)], [1 size5(1)]);
     
     %calculate the minimum and maximum values
-    x_min = min([1; xlimits(:)]);
-    x_max = max([size3(2); xlimits(:)]);
+    x_min = -644.2760;%min([1; xlimits(:)]);
+    x_max = 1.4103e+03;%max([size3(2); xlimits(:)]);
 
-    y_min = min([1; ylimits(:)]);
-    y_max = max([size3(1); ylimits(:)]);
+    y_min = -182.8095;%min([1; ylimits(:)]);
+    y_max = 1.2514e+03;%max([size3(1); ylimits(:)]);
     
     %calculate the size of the output image
     output_width  = round(x_max - x_min);
