@@ -51,18 +51,18 @@ function image_stitching_C
             end
     end
     
-    best_inliers_num
+    %best_inliers_num
     % reestimate
     reestimatePoints1 = f1(1:2, matches(1, best_inliers));
     reestimatePoints2 = f2(1:2, matches(2, best_inliers));
     best_trafo = cp2tform(reestimatePoints1', reestimatePoints2', 'projective');
     end
     
-    [sImg1, cImg1] = loadIm('campus1.jpg');
-    [sImg2, cImg2] = loadIm('campus2.jpg');
-    [sImg3, cImg3] = loadIm('campus3.jpg');
-    [sImg4, cImg4] = loadIm('campus4.jpg');
-    [sImg5, cImg5] = loadIm('campus5.jpg');
+    [sImg1, cImg1] = loadIm('Campus1.jpg');
+    [sImg2, cImg2] = loadIm('Campus2.jpg');
+    [sImg3, cImg3] = loadIm('Campus3.jpg');
+    [sImg4, cImg4] = loadIm('Campus4.jpg');
+    [sImg5, cImg5] = loadIm('Campus5.jpg');
     
     H12 = image_stitch(sImg1,sImg2);
     H23 = image_stitch(sImg2,sImg3);
@@ -73,17 +73,17 @@ function image_stitching_C
     H13 = maketform('projective', H23.tdata.T * H12.tdata.T);
     H53 = maketform('projective', H34.tdata.Tinv * H45.tdata.Tinv);
     H43 = maketform('projective', H34.tdata.Tinv);
+    Identity = [1 0 0; 0 1 0; 0 0 1];
+    H3 = maketform('projective', Identity);%projection of image3 is the identity
 
+   %________only if your matlabversion supports projective2d_______________
    %convert the Matrices in projective2d, to use the function outputLimits.  
-   H3tmp = projective2d();  %projection of image3 is the identity
-   %H3 = maketform('projective', H3tmp.T);
-   Identity = [ 1 0 0; 0 1 0; 0 0 1];
-   H3 = maketform('projective', Identity);
-   
+   %H3tmp = projective2d(H3.tdata.T);  
    %H13tmp = projective2d(H23.tdata.T * H12.tdata.T);
    %H23tmp = projective2d(H23.tdata.T);
    %H43tmp = projective2d(H34.tdata.Tinv);
    %H53tmp = projective2d(H34.tdata.Tinv * H45.tdata.Tinv);
+   %_______________________________________________________________________
     
     %get the sizes of the images
     size1 = size(sImg1);
@@ -92,6 +92,7 @@ function image_stitching_C
     size4 = size(sImg4);
     size5 = size(sImg5);
     
+    %________only if your matlabversion supports projective2d_______________
     %get the x and y limit from each image     
     %[xlimits(1,:), ylimits(1,:)] = outputLimits(H13tmp, [1 size1(2)], [1 size1(1)]);    
     %[xlimits(2,:), ylimits(2,:)] = outputLimits(H23tmp, [1 size2(2)], [1 size2(1)]);
@@ -100,11 +101,51 @@ function image_stitching_C
     %[xlimits(5,:), ylimits(5,:)] = outputLimits(H53tmp, [1 size5(2)], [1 size5(1)]);
     
     %calculate the minimum and maximum values
-    x_min = -644.2760;%min([1; xlimits(:)]);
-    x_max = 1.4103e+03;%max([size3(2); xlimits(:)]);
+    %x_min = min([1; xlimits(:)])
+    %x_max = max([size3(2); xlimits(:)])
 
-    y_min = -182.8095;%min([1; ylimits(:)]);
-    y_max = 1.2514e+03;%max([size3(1); ylimits(:)]);
+    %y_min = min([1; ylimits(:)])
+    %y_max = max([size3(1); ylimits(:)])
+    %_______________________________________________________________________
+    
+    
+    %_____________if your matlabversion dont support projective2d___________
+    %set up the cornerpoints from each image
+    data1 = [1 1 1; 1 size1(1) 1; size1(2) 1 1; size1(2) size1(1) 1];
+    data2 = [1 1 1; 1 size2(1) 1; size2(2) 1 1; size2(2) size2(1) 1];
+    data3 = [1 1 1; 1 size3(1) 1; size3(2) 1 1; size3(2) size3(1) 1];
+    data4 = [1 1 1; 1 size4(1) 1; size4(2) 1 1; size4(2) size4(1) 1];
+    data5 = [1 1 1; 1 size5(1) 1; size5(2) 1 1; size5(2) size5(1) 1];
+    
+    %transform the cornerpoints to the outputimage to get the coordinates
+    for i = 1:4
+       val = data1(i,:) * H13.tdata.T;%transform
+       xlim(i) = val(1)/val(3);       %x = x/z  because of projective transformation
+       ylim(i) = val(2)/val(3);       %y = y/z 
+       
+       val = data2(i,:) * H23.tdata.T;
+       xlim(i+4) = val(1)/val(3);
+       ylim(i+4) = val(2)/val(3);
+       
+       val = data3(i,:) * H3.tdata.T;
+       xlim(i+8) = val(1)/val(3);
+       ylim(i+8) = val(2)/val(3); 
+       
+       val = data4(i,:) * H43.tdata.T;
+       xlim(i+12) = val(1)/val(3);
+       ylim(i+12) = val(2)/val(3);
+       
+       val = data5(i,:) * H53.tdata.T;
+       xlim(i+16) = val(1)/val(3);
+       ylim(i+16) = val(2)/val(3);
+        
+    end
+    %calculate the min and maximal coordinates
+    x_max = max (xlim);
+    x_min = min (xlim);
+    y_max = max (ylim);
+    y_min = min (ylim);
+    %_______________________________________________________________________
     
     %calculate the size of the output image
     output_width  = round(x_max - x_min);
@@ -135,7 +176,32 @@ function image_stitching_C
     
     %show the image for each image
     imshow(tmp1+tmp2+tmp3+tmp4+tmp5);
+    
+    %calculate the image where only one image set the imagecolor of the
+    %overlay areas
+    withoutfeather = tmp1;
+    [hoehe,breite,tiefe] = size(withoutfeather);
 
+    for i = 1:breite
+        for j = 1:hoehe
+           if withoutfeather(j,i) == 0
+               withoutfeather(j,i,:) = tmp2(j,i,:);
+           end
+           if withoutfeather(j,i) == 0
+               withoutfeather(j,i,:) = tmp3(j,i,:);
+           end
+           if withoutfeather(j,i) == 0
+               withoutfeather(j,i,:) = tmp4(j,i,:);
+           end
+           if withoutfeather(j,i) == 0
+               withoutfeather(j,i,:) = tmp5(j,i,:);
+           end
+        end
+    end
+    figure
+    imshow(withoutfeather);
+    
+    %feathering
     %create alphamask
     alphamask1 = zeros(size1(1),size1(2)); % all zeros
     alphamask1(1,:) = 1;                   %the "borderpixels" to 1
